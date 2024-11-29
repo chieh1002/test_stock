@@ -20,8 +20,8 @@ place_filter = st.sidebar.multiselect(
 )
 stock_filter = st.sidebar.multiselect(
     "選擇儲格",
-    options=df["儲格"].unique(),
-    default=df["儲格"].unique()
+    options=df[(df["工廠"]==factory_filter)&(df["儲存地點"].isin(place_filter))]["儲格"].unique(),
+    default=df[(df["工廠"]==factory_filter)&(df["儲存地點"].isin(place_filter))]["儲格"].unique()
 )
 
 filtered_df = df[
