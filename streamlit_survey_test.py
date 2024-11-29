@@ -1,30 +1,42 @@
 import streamlit as st
 import pandas as pd
 
-df = pd.read_excel('MATNR.xlsx')
-matnr = df['MATNR'].to_list()
+df = pd.read_excel('MATNR_streamlit_test.xlsx')
+df = df.fillna('空白')
 
 st.title("盤點")
-st.write("請填入以下內容:")
+st.write("請篩選出相對應的位置並填寫數量與新儲格欄位:")
 
-with st.form("survey_form"):
-    responses = []
+st.sidebar.header("篩選器")
+factory_filter = st.sidebar.selectbox(
+    "選擇工廠",
+    df["工廠"].unique()
+)
 
-    for m in matnr:
-        place = st.text_input(f"{m}在哪個儲位？", key=f"place_{m}")
-        num = st.number_input(f"{m}有多少量?", min_value=1, max_value=120, key=f"num_{m}")
-        
-        responses.append({"MATNR": m, "Place": place, "Quantity": num})
-    
-    submitted = st.form_submit_button("確認")
+place_filter = st.sidebar.multiselect(
+    "選擇儲存地點",
+    options=df["儲存地點"].unique(),
+    default=df["儲存地點"].unique()
+)
+stock_filter = st.sidebar.multiselect(
+    "選擇儲格",
+    options=df["儲格"].unique(),
+    default=df["儲格"].unique()
+)
 
-    if submitted:
-        st.success("謝謝!")
-        # st.write("### Your Responses")
-        # for response in responses:
-        #     st.write(f"**{response['MATNR']}**: 儲位在 {response['Place']}, 數量為 {response['Quantity']}")
-        
-        # 回傳結果
-        responses_df = pd.DataFrame(responses)
-        st.write("### Responses Table")
-        st.dataframe(responses_df)
+filtered_df = df[
+    (df["工廠"]==factory_filter) &
+    (df["儲存地點"].isin(place_filter)) &
+    (df["儲格"].isin(stock_filter))
+]
+
+filtered_df['數量'] = ''
+filtered_df['新儲位'] = ''
+edited_df = st.data_editor(filtered_df[['物料','物料說明','物料規格','基礎計量單位','數量','新儲位']], use_container_width=True)
+
+st.download_button(
+    label="下載已更新表格",
+    data=edited_df.to_csv(index=False).encode('utf-8'),
+    file_name="updated_results.csv",
+    mime="text/csv"
+)
