@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 
 df = pd.read_excel('MATNR_streamlit_test.xlsx')
-df = df.astype(str)
 df = df.fillna('空白')
+df = df.astype(str)
 
 st.title("盤點")
 st.write("請篩選出相對應的位置並填寫數量與新儲格欄位:")
