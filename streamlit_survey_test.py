@@ -32,7 +32,7 @@ filtered_df = df[
 
 filtered_df['數量'] = ''
 filtered_df['新儲位'] = ''
-edited_df = st.data_editor(filtered_df[['儲存地點','儲格','物料','物料說明','物料規格','基礎計量單位','數量','新儲位']].sort_values(by=['儲存地點']), use_container_width=True)
+edited_df = st.data_editor(filtered_df[['儲存地點','儲格','物料','物料說明','物料規格','基礎計量單位','數量','新儲位']].sort_values(by=['儲存地點']), use_container_width=True,hide_index=True)
 
 st.download_button(
     label="下載已更新表格",
