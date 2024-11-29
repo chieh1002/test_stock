@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 
 df = pd.read_excel('MATNR_streamlit_test.xlsx')
+df = df.astype(str)
 df = df.fillna('空白')
 
 st.title("盤點")
