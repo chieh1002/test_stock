@@ -15,8 +15,8 @@ factory_filter = st.sidebar.selectbox(
 
 place_filter = st.sidebar.multiselect(
     "選擇儲存地點",
-    options=df["儲存地點"].unique(),
-    default=df["儲存地點"].unique()
+    options=df[df["工廠"]==factory_filter]["儲存地點"].unique(),
+    default=df[df["工廠"]==factory_filter]["儲存地點"].unique()
 )
 stock_filter = st.sidebar.multiselect(
     "選擇儲格",
